@@ -12,6 +12,15 @@ import java.util.Set;
 public class ContaService {
     private Set<Conta> contas = new HashSet<>();
 
+    public Set<Conta> listarContasAbertas(){
+        return this.contas;
+    }
+
+    public BigDecimal consultarSaldo(Integer numeroDaConta){
+        var conta = buscarContaPorNumero(numeroDaConta);
+        return conta.getSaldo();
+    }
+
     public void abrir(DadosAberturaConta dadosDaConta) {
         Cliente cliente = new Cliente(dadosDaConta.dadosCliente);
         Conta conta = new Conta(dadosDaConta.numero, BigDecimal.ZERO, cliente);
@@ -34,13 +43,21 @@ public class ContaService {
 
         conta.sacar(valor);
     }
+    public void realizarDeposito(Integer numeroDaConta, BigDecimal valor) {
+        var conta = buscarContaPorNumero(numeroDaConta);
+        if (valor.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RegraDeNegocioException("Valor do deposito deve ser superior a zero!");
+        }
+
+        conta.depositar(valor);
+    }
     public void encerrar(Integer numeroDaConta) {
         var conta = buscarContaPorNumero(numeroDaConta);
         if (conta.possuiSaldo()) {
             throw new RegraDeNegocioException("Conta não pode ser encerrada pois ainda não possui saldo!");
         }
 
-        conta.remove(conta);
+        contas.remove(conta);
     }
     private Conta buscarContaPorNumero(Integer numero){
         return contas
