@@ -11,7 +11,7 @@ public class Conta {
     private Cliente titular;
     private boolean ativo;
 
-    public Conta(Integer numero, BigDecimal saldo, Cliente titular){
+    public Conta(Integer numero, BigDecimal saldo, Cliente titular, boolean ativo){
         this.numero = numero;
         this.saldo = saldo;
         this.titular = titular;
